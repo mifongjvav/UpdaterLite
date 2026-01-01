@@ -1,6 +1,7 @@
 {
-    "ul_url": "https://github.com/ppy/osu/releases/latest/download/install.exe",
-    "ul_name": "install.exe",
+    "ul_url": null,
+    "ul_name": null,
     "ul_save_path": "./downloads",
-    "num_threads": 64
+    "num_threads": 4
 }
+
