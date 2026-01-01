@@ -41,9 +41,18 @@ for key, value in DEFAULT_CONFIG.items():
 with open(CONFIG_FILE, 'w', encoding='utf-8') as file:
     json.dump(config, file, ensure_ascii=False, indent=4)
 
+# 提取配置
+ul_url = config["ul_url"]
+ul_name = config["ul_name"]
+ul_save_path = config["ul_save_path"]
+num_threads = config["num_threads"]
+ul_autorename = config.get("ul_autorename", True)
+
 logging.info("欢迎使用UpdaterLite")
 
 def main_menu():
+    global num_threads, ul_url, ul_name, ul_save_path
+    
     logging.info("菜单：")
     logging.info("1. 按配置进行下载操作")
     logging.info("2. 按配置进行下载操作（多线程）")
@@ -55,11 +64,6 @@ def main_menu():
     # 主菜单
     if choice == "1":
         # 设置配置
-        ul_url = config.get("ul_url")
-        ul_name = config.get("ul_name")
-        ul_save_path = config.get("ul_save_path")
-        num_threads = config.get("num_threads", 4)
-        ul_autorename = config.get("ul_autorename", True)
         if ul_url is None or ul_url == "":
             logging.info("配置文件中 ul_url 为空，请先编辑配置文件或使用选项3/4手动输入")
         elif ul_name is None or ul_name == "":
@@ -72,12 +76,6 @@ def main_menu():
             ul_download(ul_url, ul_name, ul_save_path, num_threads=1, ul_autorename=ul_autorename)
             # 下载
     elif choice == "2":
-        # 提取配置
-        ul_url = config["ul_url"]
-        ul_name = config["ul_name"]
-        ul_save_path = config["ul_save_path"]
-        num_threads = config["num_threads"]
-        ul_autorename = config.get("ul_autorename", True)
         if ul_url is None or ul_url == "":
             logging.info("配置文件中 ul_url 为空，请先编辑配置文件或使用选项3/4手动输入")
         elif ul_name is None or ul_name == "":

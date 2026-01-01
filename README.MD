@@ -44,6 +44,16 @@ ul_download(ul_url, ul_name, ul_save_path, num_threads, ul_autorename)
 
 > UpdaterLite默认导入了json库，这意味着你可以通过修改ul_config.json来配置要下载的文件的URL，保存的文件名，保存目录。
 
+## 编译成exe
+
+1. 确保你已经安装了PyInstaller（`pip install pyinstaller`）
+2. 在命令行中cd到UpdaterLite的目录
+3. 运行以下命令将main.py编译成exe：
+
+   ```bash
+   pyinstaller --onefile --name UpdaterLite --add-data "ul_lib;ul_lib" main.py
+   ```
+
 ## 许可证
 
 本项目采用MIT许可证，详情请参阅LICENSE文件。[tl;dr](https://tldrlegal.com/license/mit-license) 只要在任何作品/源代码的副本中包含原始版权和许可证声明，你可以做任何你想做的事情。
