@@ -1,4 +1,3 @@
-# 修复后的ul.py文件（修改单线程下载部分）
 # 这是UpdaterLite的函数版，如果你在找独立版，转到main.py文件
 
 import urllib.request
@@ -10,6 +9,9 @@ import coloredlogs
 from urllib.parse import urlparse
 from ul_lib.utils import ul_reporthook  # 导入工具函数
 import ssl
+# 导入并禁用urllib3的InsecureRequestWarning警告
+from urllib3 import disable_warnings, InsecureRequestWarning
+disable_warnings(InsecureRequestWarning)
 
 logging.basicConfig(level=logging.INFO)
 coloredlogs.install(level="INFO", fmt="%(asctime)s - %(funcName)s: %(message)s")  # noqa: F821
