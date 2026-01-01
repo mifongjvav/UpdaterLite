@@ -1,5 +1,21 @@
+# 这是修改后的 ul_lib/utils.py 文件
 import sys
 import time
+import logging
+import coloredlogs
+
+logging.basicConfig(level=logging.INFO)
+coloredlogs.install(level="INFO", fmt="%(asctime)s - %(funcName)s: %(message)s")  # noqa: F821
+
+# ANSI 颜色代码
+COLOR_RED = '\033[31m'
+COLOR_GREEN = '\033[32m'
+COLOR_YELLOW = '\033[33m'
+COLOR_BLUE = '\033[34m'
+COLOR_PURPLE = '\033[35m'
+COLOR_CYAN = '\033[36m'
+COLOR_WHITE = '\033[37m'
+COLOR_RESET = '\033[0m'
 
 # 进度报告函数
 def ul_reporthook(count, block_size, total_size):
@@ -12,7 +28,7 @@ def ul_reporthook(count, block_size, total_size):
         while size >= 1024 and unit_index < 3:
             size /= 1024
             unit_index += 1
-        print(f"文件大小: {size:.2f} {units[unit_index]}")
+        logging.info(f"文件大小: {COLOR_CYAN}{size:.2f} {units[unit_index]}{COLOR_RESET}")
         return
     
     # 计算已下载大小和百分比
@@ -22,7 +38,9 @@ def ul_reporthook(count, block_size, total_size):
     # 显示进度条
     bar_length = 50
     filled_length = int(bar_length * percent / 100)
-    bar = '#' * filled_length + '-' * (bar_length - filled_length)
+    
+    # 为进度条添加颜色
+    bar = f"{COLOR_GREEN}{'#' * filled_length}{COLOR_RESET}{'-' * (bar_length - filled_length)}"
     
     # 显示下载速度（简单估算）
     if hasattr(ul_reporthook, 'start_time'):
@@ -33,13 +51,15 @@ def ul_reporthook(count, block_size, total_size):
             if speed >= 1024:
                 speed /= 1024
                 speed_unit = 'MB/s'
-            sys.stdout.write(f"\r[{bar}] {percent}% - {speed:.2f} {speed_unit}")
+            # 为百分比和速度添加颜色
+            sys.stdout.write(f"\r[{bar}] {COLOR_BLUE}{percent}%{COLOR_RESET} - {COLOR_PURPLE}{speed:.2f} {speed_unit}{COLOR_RESET}")
     else:
         ul_reporthook.start_time = time.time()
-        sys.stdout.write(f"\r[{bar}] {percent}%")
+        # 为百分比添加颜色
+        sys.stdout.write(f"\r[{bar}] {COLOR_BLUE}{percent}%{COLOR_RESET}")
     
     sys.stdout.flush()
     
     # 下载完成时换行
     if percent == 100:
-        print()
+        sys.stdout.write("\n")
