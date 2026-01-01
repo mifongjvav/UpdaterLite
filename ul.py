@@ -1,4 +1,3 @@
-# 修复后的ul.py文件（修正InsecureRequestWarning导入路径）
 # 这是UpdaterLite的函数版，如果你在找独立版，转到main.py文件
 
 import urllib.request
