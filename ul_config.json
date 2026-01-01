@@ -2,4 +2,6 @@
     "ul_url": null,
     "ul_name": null,
     "ul_save_path": "./downloads"
+    "num_threads": 4
 }
+
