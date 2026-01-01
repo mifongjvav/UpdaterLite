@@ -5,6 +5,8 @@
 ## 功能
 
 - 下载单个文件
+- 多线程下载
+- 支持在脚本中调用下载功能
 
 ## 安装
 
@@ -17,13 +19,13 @@
 ### 作为独立程序使用
 
 1. 运行main.py
-2. 在ul.config.json中配置要下载的文件的URL，保存的文件名，保存目录
+2. 在ul_config.json中配置要下载的文件的URL，保存的文件名，保存目录
 3. 等待下载完成
 
 ### 在脚本中使用UpdaterLite
 
 1. 在自己的脚本中导入UpdaterLite（`from ul import ul_download`）
-2. 调用`ul_download(ul_url, ul_name, ul_save_path)`函数，其中`ul_url`是要下载的文件的URL，`ul_name`是要保存的文件名，`ul_save_path`是要保存的目录
+2. 调用`ul_download(ul_url, ul_name, ul_save_path, num_threads=4, ul_autorename=True)`函数，其中`ul_url`是要下载的文件的URL，`ul_name`是要保存的文件名，`ul_save_path`是要保存的目录，`num_threads`是要使用的线程数，`ul_autorename`是是否自动重命名文件（如果文件已存在）
 3. 等待下载完成
 
 示例代码
@@ -34,11 +36,13 @@ from ul import ul_download
 ul_url = "https://example.com/file.txt"
 ul_name = "file.txt"
 ul_save_path = "C:/Users/Administrator/Desktop"
+num_threads = 4
+ul_autorename = True
 
-ul_download(ul_url, ul_name, ul_save_path)
+ul_download(ul_url, ul_name, ul_save_path, num_threads, ul_autorename)
 ```
 
-> UpdaterLite默认导入了json库，意味着你可以通过修改ul.config.json来配置要下载的文件的URL，保存的文件名，保存目录。
+> UpdaterLite默认导入了json库，这意味着你可以通过修改ul_config.json来配置要下载的文件的URL，保存的文件名，保存目录。
 
 ## 许可证
 
