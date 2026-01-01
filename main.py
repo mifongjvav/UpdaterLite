@@ -6,19 +6,40 @@ import logging
 import coloredlogs
 from ul import ul_download  # 导入下载函数
 
+# 配置文件路径
+CONFIG_FILE = 'ul_config.json'
+
+# 配置文件默认内容
+DEFAULT_CONFIG = {
+    "ul_url": "",
+    "ul_name": "",
+    "ul_save_path": "./downloads",
+    "num_threads": 4,
+    "ul_autorename": True
+}
+
 logging.basicConfig(level=logging.INFO)
 coloredlogs.install(level="INFO", fmt="%(asctime)s - %(funcName)s: %(message)s")  # noqa: F821
 
-with open('ul_config.json', 'r', encoding='utf-8') as file:
-    config = json.load(file)
+# 检查配置文件是否存在，如果不存在则创建
+if not os.path.exists(CONFIG_FILE):
+    logging.info(f"配置文件 {CONFIG_FILE} 不存在，正在创建默认配置...")
+    with open(CONFIG_FILE, 'w', encoding='utf-8') as file:
+        json.dump(DEFAULT_CONFIG, file, ensure_ascii=False, indent=4)
+    logging.info(f"默认配置文件已创建：{CONFIG_FILE}")
+
 # 加载配置文件
+with open(CONFIG_FILE, 'r', encoding='utf-8') as file:
+    config = json.load(file)
 
-ul_url = config["ul_url"]
-ul_name = config["ul_name"]
-ul_save_path = config["ul_save_path"]
-num_threads = config["num_threads"]
-ul_autorename = config["ul_autorename"]
+# 确保配置文件包含所有必要的键
+for key, value in DEFAULT_CONFIG.items():
+    if key not in config:
+        config[key] = value
 
+# 更新配置文件
+with open(CONFIG_FILE, 'w', encoding='utf-8') as file:
+    json.dump(config, file, ensure_ascii=False, indent=4)
 
 logging.info("欢迎使用UpdaterLite")
 
@@ -32,36 +53,42 @@ def main_menu():
     choice = input()
 
     # 主菜单
-    # 修复：将所有条件判断语句移到while循环体内
     if choice == "1":
         # 设置配置
-        if ul_url is None:
-            logging.info("检查你的config.json文件，ul_url不能为空")
-        if ul_name is None:
-            logging.info("检查你的config.json文件，ul_name不能为空")
-        if ul_save_path is None:
-            logging.info("检查你的config.json文件，ul_save_path不能为空")
-        if num_threads is None:
-            num_threads = 4
+        ul_url = config.get("ul_url")
+        ul_name = config.get("ul_name")
+        ul_save_path = config.get("ul_save_path")
+        num_threads = config.get("num_threads", 4)
+        ul_autorename = config.get("ul_autorename", True)
+        if ul_url is None or ul_url == "":
+            logging.info("配置文件中 ul_url 为空，请先编辑配置文件或使用选项3/4手动输入")
+        elif ul_name is None or ul_name == "":
+            logging.info("配置文件中 ul_name 为空，请先编辑配置文件或使用选项3/4手动输入")
+        elif ul_save_path is None or ul_save_path == "":
+            logging.info("配置文件中 ul_save_path 为空，请先编辑配置文件或使用选项3/4手动输入")
         else:
             if not os.path.exists(ul_save_path):
-                os.makedirs(ul_save_path) # 创建保存目录（如果不存在）
-        ul_download(ul_url, ul_name, ul_save_path, num_threads=1, ul_autorename=ul_autorename)
+                os.makedirs(ul_save_path)  # 创建保存目录（如果不存在）
+            ul_download(ul_url, ul_name, ul_save_path, num_threads=1, ul_autorename=ul_autorename)
             # 下载
     elif choice == "2":
-        if ul_url is None:
-            logging.info("检查你的config.json文件，ul_url不能为空")
-        if ul_name is None:
-            logging.info("检查你的config.json文件，ul_name不能为空")
-        if ul_save_path is None:
-            logging.info("检查你的config.json文件，ul_save_path不能为空")
-        if num_threads is None:
-            num_threads = 4
+        # 提取配置
+        ul_url = config["ul_url"]
+        ul_name = config["ul_name"]
+        ul_save_path = config["ul_save_path"]
+        num_threads = config["num_threads"]
+        ul_autorename = config.get("ul_autorename", True)
+        if ul_url is None or ul_url == "":
+            logging.info("配置文件中 ul_url 为空，请先编辑配置文件或使用选项3/4手动输入")
+        elif ul_name is None or ul_name == "":
+            logging.info("配置文件中 ul_name 为空，请先编辑配置文件或使用选项3/4手动输入")
+        elif ul_save_path is None or ul_save_path == "":
+            logging.info("配置文件中 ul_save_path 为空，请先编辑配置文件或使用选项3/4手动输入")
         else:
             if not os.path.exists(ul_save_path):
-                os.makedirs(ul_save_path) # 创建保存目录（如果不存在）
-        ul_download(ul_url, ul_name, ul_save_path, num_threads, ul_autorename)
-        # 多线程下载
+                os.makedirs(ul_save_path)  # 创建保存目录（如果不存在）
+            ul_download(ul_url, ul_name, ul_save_path, num_threads=num_threads, ul_autorename=ul_autorename)
+            # 多线程下载
     elif choice == "3":
         logging.info("url：")
         ul_url = input()
@@ -80,7 +107,7 @@ def main_menu():
         ul_save_path = input()
         logging.info("线程数：")
         num_threads = int(input())
-        ul_download(ul_url, ul_name, ul_save_path, num_threads, ul_autorename)
+        ul_download(ul_url, ul_name, ul_save_path, num_threads=num_threads, ul_autorename=ul_autorename)
         # 多线程下载
     elif choice == "5":
         os._exit(0)
