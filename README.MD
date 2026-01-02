@@ -60,4 +60,4 @@ ul_download(ul_url, ul_name, ul_save_path, num_threads, ul_autorename)
 
 ## 鸣谢
 
-感谢王梓旭提供更美观的控制台输出代码
+感谢[王梓旭](https://github.com/Wangs-official)提供更美观的控制台输出代码
