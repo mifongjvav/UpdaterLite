@@ -9,6 +9,7 @@ import coloredlogs
 from urllib.parse import urlparse
 from ul_lib.utils import ul_reporthook  # 导入工具函数
 import ssl
+import sys
 # 修复InsecureRequestWarning导入路径
 import urllib3
 # 直接禁用所有警告
@@ -217,6 +218,18 @@ def ul_download(ul_url, ul_name, ul_save_path, num_threads=4, ul_autorename=True
                     f.write(tf.read())
                 # 删除临时文件
                 os.remove(temp_file)
+        
+        # 验证下载文件的完整性
+        downloaded_size = os.path.getsize(save_file)
+        if downloaded_size != file_size:
+            logging.error(f"文件下载不完整！预期大小: {file_size} 字节，实际大小: {downloaded_size} 字节")
+            # 删除不完整的文件
+            os.remove(save_file)
+            return
+        
+        # 多线程下载完成后，输出换行符确保日志在新行显示
+        sys.stdout.write("\n")
+        sys.stdout.flush()
         
         logging.info("下载完成!")
     except Exception as e:
