@@ -57,3 +57,7 @@ ul_download(ul_url, ul_name, ul_save_path, num_threads, ul_autorename)
 ## 许可证
 
 本项目采用MIT许可证，详情请参阅LICENSE文件。[tl;dr](https://tldrlegal.com/license/mit-license) 只要在任何作品/源代码的副本中包含原始版权和许可证声明，你可以做任何你想做的事情。
+
+## 鸣谢
+
+感谢[王梓旭](https://github.com/Wangs-official)提供更美观的控制台输出代码

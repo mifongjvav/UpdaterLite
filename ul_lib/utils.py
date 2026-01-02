@@ -51,12 +51,12 @@ def ul_reporthook(count, block_size, total_size):
             if speed >= 1024:
                 speed /= 1024
                 speed_unit = 'MB/s'
-            # 为百分比和速度添加颜色
-            sys.stdout.write(f"\r[{bar}] {COLOR_BLUE}{percent}%{COLOR_RESET} - {COLOR_PURPLE}{speed:.2f} {speed_unit}{COLOR_RESET}")
+            # 为百分比和速度添加颜色，使用\033[2K清除整行
+            sys.stdout.write(f"\r\033[2K[{bar}] {COLOR_BLUE}{percent}%{COLOR_RESET} - {COLOR_PURPLE}{speed:.2f} {speed_unit}{COLOR_RESET}")
     else:
         ul_reporthook.start_time = time.time()
-        # 为百分比添加颜色
-        sys.stdout.write(f"\r[{bar}] {COLOR_BLUE}{percent}%{COLOR_RESET}")
+        # 为百分比添加颜色，使用\033[2K清除整行
+        sys.stdout.write(f"\r\033[2K[{bar}] {COLOR_BLUE}{percent}%{COLOR_RESET}")
     
     sys.stdout.flush()
     
